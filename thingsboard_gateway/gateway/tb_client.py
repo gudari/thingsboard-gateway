@@ -21,9 +21,11 @@ from os.path import exists
 from ssl import CERT_REQUIRED, PROTOCOL_TLSv1_2
 
 from simplejson import dumps, load
+print("imports 1")
 
 from thingsboard_gateway.tb_utility.tb_utility import TBUtility
 
+print("imports 2")
 try:
     from tb_gateway_mqtt import TBGatewayMqttClient, TBDeviceMqttClient
 except ImportError:
@@ -55,6 +57,7 @@ class TBClient(threading.Thread):
         self.__stopped = False
         self.__paused = False
         self._last_cert_check_time = 0
+        print("init_finish")
 
         # check if provided creds or provisioning strategy
         if config.get('security'):
