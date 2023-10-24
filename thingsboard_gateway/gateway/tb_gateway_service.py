@@ -172,6 +172,7 @@ class TBGatewayService:
             config_file = path.dirname(path.dirname(path.abspath(__file__))) + '/config/tb_gateway.json'.replace('/',
                                                                                                                  path.sep)
         self.gateway_name = path.splitext(path.basename(self._config_dir))[0]
+        print("test multiproccesing 1")
         logging_error = None
         try:
             with open(path.join(self._config_dir, self.gateway_name + 'logs.json'), 'r') as file:
@@ -192,6 +193,7 @@ class TBGatewayService:
         # change main config if Gateway running with docker env variables
         self.__modify_main_config()
 
+        print("test multiproccesing 2")
         log.info("Gateway "  + self.gateway_name + " starting...")
         self.__updater = TBUpdater()
         self.__updates_check_period_ms = 300000
@@ -207,6 +209,7 @@ class TBGatewayService:
         self.name = ''.join(choice(ascii_lowercase) for _ in range(64))
         self.__rpc_register_queue = SimpleQueue()
         self.__rpc_requests_in_progress = {}
+        print("test multiproccesing 3")
         self.tb_client = TBClient(self.__config["thingsboard"], self._config_dir)
         try:
             self.tb_client.disconnect()
@@ -227,6 +230,7 @@ class TBGatewayService:
         self.__converted_data_queue = SimpleQueue()
         self.__save_converted_data_thread = Thread(name="Save converted data", daemon=True,
                                                    target=self.__send_to_storage)
+        print("test multiproccesing 3")
         self.__save_converted_data_thread.start()
         self._implemented_connectors = {}
         self._event_storage_types = {
@@ -244,6 +248,7 @@ class TBGatewayService:
             "device_deleted": self.__process_deleted_gateway_devices,
         }
 
+        print("test multiproccesing 4")
         self.__remote_shell = None
         self.init_remote_shell(self.__config["thingsboard"].get("remoteShell"))
 
@@ -262,6 +267,7 @@ class TBGatewayService:
         self.__remote_configurator = None
         self.__request_config_after_connect = False
 
+        print("test multiproccesing 5")
         self.__grpc_config = None
         self.__grpc_connectors = None
         self.__grpc_manager = None
@@ -277,6 +283,8 @@ class TBGatewayService:
             thread = Thread(name='Checking devices idle time', target=self.__check_devices_idle_time, daemon=True)
             thread.start()
             log.info('Start checking devices idle time')
+
+        print("test multiproccesing 6")
 
         self.__statistics = None
         self.__statistics_service = None
@@ -301,6 +309,7 @@ class TBGatewayService:
 
         self.__init_remote_configuration()
 
+        print("test multiproccesing 7")
         log.info("Gateway started.")
 
         self._watchers_thread = Thread(target=self._watchers, name='Watchers', daemon=True)
@@ -318,6 +327,7 @@ class TBGatewayService:
             manager_address = ('127.0.0.1', 9999)
         self.manager = GatewayManager(address=manager_address, authkey=b'gateway')
 
+        print("test multiproccesing 8")
         if current_thread() is main_thread():
             GatewayManager.register('get_gateway', self.get_gateway, proxytype=AutoProxy, exposed=self.EXPOSED_GETTERS,
                                     create_method=False)
