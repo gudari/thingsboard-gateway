@@ -42,8 +42,8 @@ from thingsboard_gateway.gateway.device_filter import DeviceFilter
 print("imports 3")
 from thingsboard_gateway.gateway.duplicate_detector import DuplicateDetector
 from thingsboard_gateway.gateway.shell.proxy import AutoProxy
-print("imports 4")
 from thingsboard_gateway.gateway.statistics_service import StatisticsService
+print("imports 4")
 from thingsboard_gateway.gateway.tb_client import TBClient
 print("imports 5")
 from thingsboard_gateway.storage.file.file_event_storage import FileEventStorage
