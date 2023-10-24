@@ -12,6 +12,8 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 
+print("imports 1")
+
 import logging
 import logging.config
 import logging.handlers
@@ -31,6 +33,8 @@ from time import sleep, time
 from simplejson import JSONDecodeError, dumps, load, loads
 from yaml import safe_load
 
+print("imports 2")
+
 from thingsboard_gateway.gateway.constant_enums import DeviceActions, Status
 from thingsboard_gateway.gateway.constants import CONNECTED_DEVICES_FILENAME, CONNECTOR_PARAMETER, \
     PERSISTENT_GRPC_CONNECTORS_KEY_FILENAME
@@ -49,7 +53,7 @@ from thingsboard_gateway.tb_utility.tb_logger import TbLogger
 from thingsboard_gateway.tb_utility.tb_remote_shell import RemoteShell
 from thingsboard_gateway.tb_utility.tb_updater import TBUpdater
 from thingsboard_gateway.tb_utility.tb_utility import TBUtility
-
+print("imports 3")
 GRPC_LOADED = False
 try:
     from thingsboard_gateway.gateway.grpc_service.grpc_connector import GrpcConnector
@@ -90,6 +94,7 @@ DEFAULT_DEVICE_FILTER = {
 }
 
 SECURITY_VAR = ('accessToken', 'caCert', 'privateKey', 'cert', 'clientId', 'username', 'password')
+print("imports 4")
 
 
 def load_file(path_to_file):
