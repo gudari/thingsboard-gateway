@@ -170,10 +170,10 @@ class TBGatewayService:
         if config_file is None:
             config_file = path.dirname(path.dirname(path.abspath(__file__))) + '/config/tb_gateway.json'.replace('/',
                                                                                                                  path.sep)
-        self.gateway_name = path.splitext(path.basename(self._config_dir))[0]
+        self.gateway_name = path.splitext(path.basename(config_file))[0]
         logging_error = None
         try:
-            with open(path.join(self._config_dir, self.gateway_name + 'logs.json'), 'r') as file:
+            with open(path.join(self._config_dir, self.gateway_name + '_logs.json'), 'r') as file:
                 log_config = load(file)
             logging.config.dictConfig(log_config)
         except Exception as e:
