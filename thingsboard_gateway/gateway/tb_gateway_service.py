@@ -317,7 +317,6 @@ class TBGatewayService:
             manager_address = ('127.0.0.1', 9999)
         self.manager = GatewayManager(address=manager_address, authkey=b'gateway')
 
-        print("test multiproccesing 8")
         if current_thread() is main_thread():
             GatewayManager.register('get_gateway', self.get_gateway, proxytype=AutoProxy, exposed=self.EXPOSED_GETTERS,
                                     create_method=False)
