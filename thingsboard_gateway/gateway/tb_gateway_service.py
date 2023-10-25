@@ -165,6 +165,7 @@ class TBGatewayService:
         if config_file is None:
             config_file = path.dirname(path.dirname(path.abspath(__file__))) + '/config/tb_gateway.yaml'.replace('/',
                                                                                                                  path.sep)
+        self.gateway_name = path.splitext(path.basename(config_file))[0]
         with open(config_file) as general_config:
             self.__config = safe_load(general_config)
 
@@ -174,12 +175,12 @@ class TBGatewayService:
         self._config_dir = path.dirname(path.abspath(config_file)) + path.sep
         logging_error = None
         try:
-            logging.config.fileConfig(self._config_dir + "logs.conf", disable_existing_loggers=False)
+            logging.config.fileConfig(path.join(self._config_dir, self.gateway_name + "_logs.conf"), disable_existing_loggers=False)
         except Exception as e:
             logging_error = e
         global log
         log = logging.getLogger('service')
-        log.info("Gateway starting...")
+        log.info("Gateway "  + self.gateway_name + " starting...")
         self.__updater = TBUpdater()
         self.__updates_check_period_ms = 300000
         self.__updates_check_time = 0
@@ -1274,21 +1275,21 @@ class TBGatewayService:
 
     def __load_persistent_devices(self):
         devices = None
-        if CONNECTED_DEVICES_FILENAME in listdir(self._config_dir) and \
-                path.getsize(self._config_dir + CONNECTED_DEVICES_FILENAME) > 0:
+        if self.gateway_name + '_' + CONNECTED_DEVICES_FILENAME in listdir(self._config_dir) and \
+                path.getsize(self._config_dir + self.gateway_name + '_' + CONNECTED_DEVICES_FILENAME) > 0:
             try:
-                devices = load_file(self._config_dir + CONNECTED_DEVICES_FILENAME)
+                devices = load_file(self._config_dir + self.gateway_name + '_' + CONNECTED_DEVICES_FILENAME)
             except Exception as e:
                 log.exception(e)
         else:
-            open(self._config_dir + CONNECTED_DEVICES_FILENAME, 'w').close()
+            open(self._config_dir + self.gateway_name + '_' + CONNECTED_DEVICES_FILENAME, 'w').close()
 
         if devices is not None:
             log.debug("Loaded devices:\n %s", devices)
             for device_name in devices:
                 try:
                     if not isinstance(devices[device_name], list):
-                        open(self._config_dir + CONNECTED_DEVICES_FILENAME, 'w').close()
+                        open(self._config_dir + self.gateway_name + '_' + CONNECTED_DEVICES_FILENAME, 'w').close()
                         log.debug("Old connected_devices file, new file will be created")
                         return
                     if self.available_connectors.get(devices[device_name][0]):
@@ -1318,7 +1319,7 @@ class TBGatewayService:
                     if device in self.__renamed_devices:
                         data_to_save[device].append(self.__renamed_devices.get(device))
 
-            with open(self._config_dir + CONNECTED_DEVICES_FILENAME, 'w') as config_file:
+            with open(self._config_dir + self.gateway_name + '_' + CONNECTED_DEVICES_FILENAME, 'w') as config_file:
                 try:
                     config_file.write(dumps(data_to_save, indent=2, sort_keys=True))
                 except Exception as e:
