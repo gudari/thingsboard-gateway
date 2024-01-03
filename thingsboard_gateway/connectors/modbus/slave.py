@@ -83,7 +83,7 @@ class Slave(Thread):
                 self.callback(self)
                 self.last_polled_time = time()
 
-            sleep(0.02)
+            sleep(0.2)
 
     def run(self):
         self.timer()
